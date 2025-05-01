@@ -1,0 +1,22 @@
+services:
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+  user-service:
+    build: ./fitness-user-service
+    environment:
+      MONGODB_URI: "mongodb://admin:password@mongo:27017/fitness-db?authSource=admin"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
