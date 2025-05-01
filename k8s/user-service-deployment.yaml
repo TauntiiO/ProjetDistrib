@@ -20,6 +20,16 @@ spec:
         ports:
         - containerPort: 3000
         env:
+        - name: MONGO_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: username
+        - name: MONGO_PASSWORD
+          valueFrom:
+           secretKeyRef:
+              name: mongo-secret
+              key: password
         - name: MONGODB_URI
           value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongo:27017/fitness-db?authSource=admin"
         envFrom:
