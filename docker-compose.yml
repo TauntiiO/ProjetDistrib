@@ -1,22 +1,80 @@
+version: '3.8'
+
 services:
-  mongo:
-    image: mongo
+  mysql-users:
+    image: mysql:8.0
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: users_db
     volumes:
-      - mongo-data:/data/db
-    ports:
-      - "27017:27017"
+      - ./users-service/users.sql:/docker-entrypoint-initdb.d/users.sql
+    networks:
+      - fitness-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
-  user-service:
-    build: ./fitness-user-service
+  mysql-sessions:
+    image: mysql:8.0
     environment:
-      MONGODB_URI: "mongodb://admin:password@mongo:27017/fitness-db?authSource=admin"
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mongo
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: sessions_db
+    volumes:
+      - ./sessions-service/sessions.sql:/docker-entrypoint-initdb.d/sessions.sql
+    networks:
+      - fitness-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
-volumes:
-  mongo-data:
+  users-service:
+    build: ./users-service
+    environment:
+      DB_HOST: mysql-users
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: users_db
+    depends_on:
+      mysql-users:
+        condition: service_healthy
+    networks:
+      - fitness-net
+    restart: unless-stopped
+
+  sessions-service:
+    build: ./sessions-service
+    environment:
+      DB_HOST: mysql-sessions
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: sessions_db
+    depends_on:
+      mysql-sessions:
+        condition: service_healthy
+    networks:
+      - fitness-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - users-service
+      - sessions-service
+    networks:
+      - fitness-net
+    restart: unless-stopped
+
+networks:
+  fitness-net:
+    driver: bridge
