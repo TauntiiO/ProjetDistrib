@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sessions-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sessions-service
+  template:
+    metadata:
+      labels:
+        app: sessions-service
+    spec:
+      containers:
+      - name: sessions-service
+        image: tunatio/fitness-sessions:1.0
+        env:
+        - name: DB_HOST
+          value: mysql
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: password
+        - name: DB_NAME
+          value: fitness_db
+        ports:
+        - containerPort: 3001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sessions-service
+spec:
+  selector:
+    app: sessions-service
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
