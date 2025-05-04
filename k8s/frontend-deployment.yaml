@@ -15,8 +15,13 @@ spec:
       containers:
       - name: frontend
         image: tunatio/fitness-frontend:1.0
-        ports:
-        - containerPort: 80
+        volumeMounts:
+        - name: frontend-files
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: frontend-files
+        configMap:
+          name: frontend-config
 ---
 apiVersion: v1
 kind: Service
