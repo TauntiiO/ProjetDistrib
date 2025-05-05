@@ -1,6 +1,5 @@
 let currentUserId = null;
 
-// Login
 document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value;
@@ -23,7 +22,6 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     }
 });
 
-// Register
 document.getElementById('register-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('new-username').value;
@@ -42,7 +40,6 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
     }
 });
 
-// Load dashboard
 if (document.getElementById('username')) {
     const userId = localStorage.getItem('userId');
     const username = localStorage.getItem('username');
@@ -56,7 +53,6 @@ if (document.getElementById('username')) {
     }
 }
 
-// Add session
 document.getElementById('session-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const duration = document.getElementById('duration').value;
@@ -71,7 +67,6 @@ document.getElementById('session-form')?.addEventListener('submit', async (e) =>
     loadSessions();
 });
 
-// Load sessions
 async function loadSessions() {
     const response = await fetch(`/api/sessions/sessions/${currentUserId}`);
     const sessions = await response.json();

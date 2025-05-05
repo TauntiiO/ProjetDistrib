@@ -6,7 +6,6 @@ const db = require('./db');
 const app = express();
 app.use(bodyParser.json());
 
-// Inscription
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
     const conn = await db.getConnection();
@@ -20,7 +19,6 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// Connexion
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     const conn = await db.getConnection();
