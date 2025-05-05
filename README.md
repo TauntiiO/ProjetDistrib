@@ -64,6 +64,8 @@ Deploy components
 kubectl apply -f k8s/
 ```
 
+Wait for the deployment to be complete, it can take a few minutes.
+
 Open the frontend service on navigator to create an account and login to add a session and see the list of your previous sessions
 
 ```
