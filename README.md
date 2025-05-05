@@ -1,6 +1,5 @@
 # ProjetDistrib
 
-# ProjetDistrib
 
 ## Local testing :
 
