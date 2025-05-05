@@ -1,10 +1,24 @@
-# ProjetDistrib
+# ProjetDistrib - Fitness Tracking Application
 
 ## Authors
 
-Anaïs Kadic
-
+Anaïs Kadic  
 Titouan Brierre
+
+## Project Description
+
+A microservices-based fitness tracking application with:
+- User authentication service (Node.js)
+- Workout sessions tracking service (Node.js)
+- Frontend interface (html/js)
+- MySQL database 
+- Kubernetes/Docker deployment
+
+## Prerequisites
+
+- Docker Desktop
+- Minikube
+- kubectl
 
 ## Local testing :
 
