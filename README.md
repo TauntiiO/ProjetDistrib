@@ -1,5 +1,10 @@
 # ProjetDistrib
 
+## Authors
+
+Anaïs Kadic
+
+Titouan Brierre
 
 ## Local testing :
 
