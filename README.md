@@ -25,8 +25,8 @@ Start Minikube
 
 ```
 minikube start
-
 ```
+
 Activate ingress
 
 ```
