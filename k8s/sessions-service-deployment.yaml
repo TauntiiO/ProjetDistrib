@@ -12,6 +12,7 @@ spec:
       labels:
         app: sessions-service
     spec:
+      serviceAccountName: sessions-service-account 
       containers:
       - name: sessions-service
         image: tunatio/fitness-sessions:1.0
