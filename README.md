@@ -160,3 +160,64 @@ mysql> SELECT * FROM sessions;
 |  3 |       1 | 2025-05-16 19:00:45 |       30 |
 +----+---------+---------------------+----------+
 1 row in set (0.01 sec)
+```
+
+##  Security
+
+Here are the steps used to verify that Istio and RBAC security mechanisms are correctly applied to the Kubernetes cluster.
+
+---
+
+### TEST 1 – Check Istio Sidecar Injection (`2/2 READY`)
+Run:
+```bash
+kubectl get pods
+```
+You should see all your main service pods in Running state with 2/2,
+
+### TEST 2 – Verify that mTLS is enforced (STRICT)
+
+List all PeerAuthentication rules:
+```
+kubectl get peerauthentication -A
+```
+You should see:
+```
+NAMESPACE   NAME       MODE     ...
+default     default    STRICT
+```
+
+### TEST 3 – Check that the frontend is in PERMISSIVE mode
+```
+kubectl get peerauthentication -n default
+```
+Then inspect the configuration of the frontend rule:
+```
+kubectl get peerauthentication frontend -o yaml
+```
+This allows unauthenticated external HTTP traffic to reach the frontend, which is required for browser access.
+
+### TEST 4 – Verify RBAC with a Kubernetes Token
+
+1. Generate a token:
+```
+kubectl create token users-service-account
+```
+2. Get your API server address:
+```
+kubectl cluster-info
+```
+You’ll see something like:
+```
+Kubernetes control plane is running at https://192.168.49.2:8443
+```
+3. Test access with curl:
+```
+curl -H "Authorization: Bearer <YOUR_TOKEN>" https://<KUBE_API_SERVER>/api/v1/namespaces --insecure
+```
+
+This confirms that:
+
+  The token is valid and authenticated
+
+  Access is denied due to RBAC restrictions
