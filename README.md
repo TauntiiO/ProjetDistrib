@@ -19,6 +19,45 @@ A microservices-based fitness tracking application with:
 - Docker Desktop
 - Minikube
 - kubectl
+  
+##  Project Structure
+
+```bash
+ProjetDistrib/
+├── docker-compose.yml             # Docker Compose file for local testing
+├── frontend/                      # Static frontend (HTML, JS)
+│   ├── app.js                   
+│   ├── Dockerfile              
+│   ├── index.html                
+│   └── login.html                
+├── init.sql                       # SQL script to initialize MySQL schema
+├── k8s/                           # Kubernetes deployment YAML files
+│   ├── frontend-deployment.yaml
+│   ├── frontend-mtls.yaml        
+│   ├── ingress.yaml               
+│   ├── mysql-deployment.yaml
+│   ├── rbac-sessions-service.yaml
+│   ├── rbac-users-service.yaml
+│   ├── sessions-service-deployment.yaml
+│   ├── strict-mtls.yaml      
+│   └── users-service-deployment.yaml
+├── nginx/                     
+│   └── default.conf
+├── package-lock.json          
+├── README.md                  
+├── sessions-service/             # Microservice to handle workout sessions
+│   ├── app.js                 
+│   ├── db.js                     
+│   ├── Dockerfile                 
+│   └── package.json
+├── token.txt                 
+└── users-service/                # Microservice for user authentication
+    ├── app.js                     
+    ├── db.js                     
+    ├── Dockerfile                 
+    ├── package.json
+    ├── package-lock.json
+```
 
 ## Local testing :
 
@@ -161,6 +200,23 @@ mysql> SELECT * FROM sessions;
 +----+---------+---------------------+----------+
 1 row in set (0.01 sec)
 ```
+##  API Endpoints
+
+Below is a list of the REST API endpoints exposed by the two microservices.
+
+### Users Service (`users-service`)
+
+| Method | Endpoint     | Description                             |
+|--------|--------------|-----------------------------------------|
+| POST   | `/register`  | Create a new user account               |
+| POST   | `/login`     | Authenticate a user and return user ID |
+
+### Sessions Service (`sessions-service`)
+
+| Method | Endpoint             | Description                                           |
+|--------|----------------------|-------------------------------------------------------|
+| POST   | `/sessions`          | Add a new workout session (`userId` + `duration`)    |
+| GET    | `/sessions/:userId`  | Get all sessions for a given user                    |
 
 ##  Security
 
