@@ -118,7 +118,7 @@ Inside the pod, connect to MySQL:
 ```
 mysql -h mysql -u root -p
 ```
-# Password: password
+Password: password
 
 Then run the following SQL commands:
 ```
