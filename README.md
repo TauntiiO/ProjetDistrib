@@ -90,6 +90,12 @@ Activate ingress
 minikube addons enable ingress
 ```
 
+Activate istio
+
+```
+minikube addons enable istio
+```
+
 Create ConfigMaps (run at the root of the project)
 
 ```
